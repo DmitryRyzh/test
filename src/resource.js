@@ -24,6 +24,9 @@
 
 var res = {
     HelloWorld_png : "res/HelloWorld.png",
+    cell_png : "res/cell.png",
+    cross_png : "res/cross.png",
+    cell_png : "res/cell.png"
 };
 
 var g_resources = [];
