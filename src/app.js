@@ -11,9 +11,20 @@ var HelloWorldLayer = cc.Layer.extend({
     target:null,
     isDragging:false,
     isLocked:false, // 
+    grid: [],
+
     ctor:function () {
         this._super();
-        this.setColor(cc.color(255,255,255)); 
+        
+
+        var background = new cc.Sprite(res.background_jpg);
+        background.attr({
+            x: cc.winSize.width/2,
+            y: cc.winSize.height/2
+        });
+        this.addChild(background);
+
+
 
        
         this.sprite = new cc.Sprite(res.HelloWorld_png);
@@ -22,14 +33,21 @@ var HelloWorldLayer = cc.Layer.extend({
             y: cc.winSize.height / 2
         });
         this.addChild(this.sprite);
+        this.grid = []; // Инициализация массива
 
-        // Создаем целевую область
-        this.target = new cc.Sprite("res/cell.png"); // предполагается, что у вас есть изображение для целевой области
-        this.target.attr({
-            x: cc.winSize.width / 2,
-            y: cc.winSize.height / 2
-        });
-        this.addChild(this.target);
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                var cell = new cc.Sprite("res/cell.png");
+                cell.attr({
+                    x: cc.winSize.width / 4 + (i * cc.winSize.width / 4),
+                    y: cc.winSize.height / 4 + (j * cc.winSize.height / 4)
+                });
+                this.addChild(cell);
+                this.grid.push(cell);
+            }
+        }
+
+
 
         // Добавляем слушатель событий мыши
         cc.eventManager.addListener({
@@ -77,6 +95,12 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     isInTarget:function(){
-        return cc.rectContainsPoint(this.target.getBoundingBox(), cc.p(this.sprite.x, this.sprite.y));
+        for (var i = 0; i < this.grid.length; i++) {
+            if (cc.rectContainsPoint(this.grid[i].getBoundingBox(), cc.p(this.sprite.x, this.sprite.y))) {
+                return true; // Если спрайт находится внутри хотя бы одного квадрата, возвращаем true
+            }
+        }
+        return false; // Если спрайт не находится ни в одном квадрате, возвращаем false
     }
+    
 });
