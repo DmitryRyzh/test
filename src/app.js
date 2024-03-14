@@ -10,12 +10,12 @@ var HelloWorldLayer = cc.Layer.extend({
     sprite:null,
     target:null,
     isDragging:false,
-    isLocked:false, // новая переменная для отслеживания блокировки спрайта
+    isLocked:false, // 
     ctor:function () {
         this._super();
-        this.setColor(cc.color(255,255,255)); // Устанавливаем белый цвет фона
+        this.setColor(cc.color(255,255,255)); 
 
-        // Загружаем спрайт
+       
         this.sprite = new cc.Sprite(res.HelloWorld_png);
         this.sprite.attr({
             x: cc.winSize.width / 2,
