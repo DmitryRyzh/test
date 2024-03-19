@@ -10,13 +10,13 @@ var HelloWorldLayer = cc.Layer.extend({
     sprite:null,
     target:null,
     isDragging:false,
-    isLocked:false, // 
-    grid: [],
+    isLocked:false,
+    sprites: [], // массив для спрайтов
+    grid: [], // массив для ячеек сетки
 
     ctor:function () {
         this._super();
         
-
         var background = new cc.Sprite(res.background_jpg);
         background.attr({
             x: cc.winSize.width/2,
@@ -24,16 +24,21 @@ var HelloWorldLayer = cc.Layer.extend({
         });
         this.addChild(background);
 
-
-
-       
-        this.sprite = new cc.Sprite(res.HelloWorld_png);
+        this.sprite = new cc.Sprite("res/cross.png");
         this.sprite.attr({
             x: cc.winSize.width / 2,
             y: cc.winSize.height / 2
         });
         this.addChild(this.sprite);
-        this.grid = []; // Инициализация массива
+        this.sprites.push(this.sprite);
+
+        var newSprite2 = new cc.Sprite("res/cross.png");
+        newSprite2.attr({
+            x: cc.winSize.width / 2 + 100,
+            y: cc.winSize.height / 2
+        });
+        this.addChild(newSprite2);
+        this.sprites.push(newSprite2);
 
         for (var i = 0; i < 3; i++) {
             for (var j = 0; j < 3; j++) {
@@ -47,26 +52,11 @@ var HelloWorldLayer = cc.Layer.extend({
             }
         }
 
-
-
-        // Добавляем слушатель событий мыши
         cc.eventManager.addListener({
             event: cc.EventListener.MOUSE,
-            onMouseDown: function(event){
-                if(event.getButton() == cc.EventMouse.BUTTON_LEFT){
-                    event.getCurrentTarget().processMouseDown(event);
-                }
-            },
-            onMouseMove: function(event){
-                if(event.getButton() == cc.EventMouse.BUTTON_LEFT){
-                    event.getCurrentTarget().processMouseMove(event);
-                }
-            },
-            onMouseUp: function(event){
-                if(event.getButton() == cc.EventMouse.BUTTON_LEFT){
-                    event.getCurrentTarget().processMouseUp(event);
-                }
-            }
+            onMouseDown: this.processMouseDown.bind(this),
+            onMouseMove: this.processMouseMove.bind(this),
+            onMouseUp: this.processMouseUp.bind(this)
         }, this);
 
         return true;
@@ -74,33 +64,36 @@ var HelloWorldLayer = cc.Layer.extend({
 
     processMouseDown:function(event){
         var location = event.getLocation();
-        if(cc.rectContainsPoint(this.sprite.getBoundingBox(), location) && !this.isLocked){
-            this.isDragging = true; // устанавливаем флаг в true
+        for (var i = 0; i < this.sprites.length; i++) {
+            if (cc.rectContainsPoint(this.sprites[i].getBoundingBox(), location) && !this.sprites[i].isLocked) {
+                this.isDragging = true;
+                this.sprite = this.sprites[i];
+                break;
+            }
         }
     },
 
     processMouseMove:function(event){
         var location = event.getLocation();
-        if(this.isDragging){ // проверяем флаг
+        if(this.isDragging){
             this.sprite.x = location.x;
             this.sprite.y = location.y;
         }
     },
 
     processMouseUp:function(event){
-        this.isDragging = false; // устанавливаем флаг в false
+        this.isDragging = false;
         if(this.isInTarget()){
-            this.isLocked = true; // блокируем спрайт, если он находится в целевой области
+            this.sprite.isLocked = true;
         }
     },
 
     isInTarget:function(){
         for (var i = 0; i < this.grid.length; i++) {
             if (cc.rectContainsPoint(this.grid[i].getBoundingBox(), cc.p(this.sprite.x, this.sprite.y))) {
-                return true; // Если спрайт находится внутри хотя бы одного квадрата, возвращаем true
+                return true;
             }
         }
-        return false; // Если спрайт не находится ни в одном квадрате, возвращаем false
+        return false;
     }
-    
 });
