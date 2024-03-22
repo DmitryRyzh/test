@@ -24,54 +24,68 @@ var HelloWorldLayer = cc.Layer.extend({
         });
         this.addChild(background);
 
-        var red_circle = new cc.Sprite("res/circle.png"); // красный круг
-        red_circle.attr({
+        var redCircle  = new cc.Sprite("res/circle.png"); // красный круг
+        redCircle .attr({
             x: cc.winSize.width / 2 - 100,
-            y: cc.winSize.height / 2 + 270
+            y: cc.winSize.height / 2 + 270,
+            value: 1,
+            team: 'red'
+            
         });
-        this.addChild(red_circle);
-        this.sprites.push(red_circle);
+        this.addChild(redCircle );
+        this.sprites.push(redCircle );
 
-        var red_cross = new cc.Sprite("res/cross.png"); // красный крест
-        red_cross.attr({
+        var redCross  = new cc.Sprite("res/cross.png"); // красный крест
+        redCross .attr({
             x: cc.winSize.width / 2 - 0,
-            y: cc.winSize.height / 2 + 270
+            y: cc.winSize.height / 2 + 270,
+            value: 2,
+            team: 'red'
         });
-        this.addChild(red_cross);
-        this.sprites.push(red_cross);
+        this.addChild(redCross );
+        this.sprites.push(redCross );
 
-        var red_triangle = new cc.Sprite("res/triangle.png"); // красный треугольник
-        red_triangle.attr({
+        var redTriangle  = new cc.Sprite("res/triangle.png"); // красный треугольник
+        redTriangle .attr({
             x: cc.winSize.width / 2 + 100,
-            y: cc.winSize.height / 2 + 270
+            y: cc.winSize.height / 2 + 270,
+            value: 3,
+            team: 'red'
         });
-        this.addChild(red_triangle);
-        this.sprites.push(red_triangle);
+        this.addChild(redTriangle );
+        this.sprites.push(redTriangle );
 
 
-        var blue_circle = new cc.Sprite("res/blue_circle.png");// синий круг
-        blue_circle.attr({
+        var blueCircle  = new cc.Sprite("res/blue_circle.png");// синий круг
+        blueCircle .attr({
             x: cc.winSize.width / 2 - 100,
-            y: cc.winSize.height / 2 - 270
-        });
-        this.addChild(blue_circle);
-        this.sprites.push(blue_circle);
+            y: cc.winSize.height / 2 - 270,
+            value: 1,
+            team: 'blue'
 
-        var blue_cross = new cc.Sprite("res/blue_cross.png"); // синий крест
-        blue_cross.attr({
+        });
+        this.addChild(blueCircle );
+        this.sprites.push(blueCircle );
+
+        var blueCross  = new cc.Sprite("res/blue_cross.png"); // синий крест
+        blueCross .attr({
             x: cc.winSize.width / 2 + 0,
-            y: cc.winSize.height / 2 - 270
+            y: cc.winSize.height / 2 - 270,
+            value: 2,
+            team: 'blue'
         });
-        this.addChild(blue_cross);
-        this.sprites.push(blue_cross);
+        this.addChild(blueCross );
+        this.sprites.push(blueCross );
 
-        var blue_traingle = new cc.Sprite("res/blue_triangle.png"); // синий треугольник
-        blue_traingle.attr({
+        var blueTriangle  = new cc.Sprite("res/blue_triangle.png"); // синий треугольник
+        blueTriangle .attr({
             x: cc.winSize.width / 2 + 100,
-            y: cc.winSize.height / 2 - 270
+            y: cc.winSize.height / 2 - 270,
+            value: 3,
+            team: 'blue'
         });
-        this.addChild(blue_traingle);
-        this.sprites.push(blue_traingle);
+        this.addChild(blueTriangle );
+        this.sprites.push(blueTriangle );
         
 
         for (var i = 0; i < 3; i++) { // размтека сетки
@@ -96,7 +110,7 @@ var HelloWorldLayer = cc.Layer.extend({
         return true;
     },
 
-    processMouseDown:function(event){ // мышь вниз
+    processMouseDown:function(event){
         var location = event.getLocation();
         for (var i = 0; i < this.sprites.length; i++) {
             if (cc.rectContainsPoint(this.sprites[i].getBoundingBox(), location) && !this.sprites[i].isLocked) {
@@ -107,6 +121,29 @@ var HelloWorldLayer = cc.Layer.extend({
         }
     },
 
+    processMouseUp:function(event){
+        this.isDragging = false;
+        if(this.isInTarget()){
+            // Проверяем, есть ли в этой ячейке другой спрайт с меньшим значением и другой командой
+            for (var i = 0; i < this.sprites.length; i++) {
+                if (this.sprites[i] !== this.sprite && cc.rectContainsPoint(this.sprites[i].getBoundingBox(), cc.p(this.sprite.x, this.sprite.y)) && this.sprites[i].team !== this.sprite.team) {
+                    if (this.sprites[i].value < this.sprite.value) {
+                        // Если есть, удаляем его
+                        this.removeChild(this.sprites[i]);
+                        this.sprites.splice(i, 1);
+                        break;
+                    } else {
+                        // Если спрайт с большим или равным значением уже находится в ячейке, не делаем ничего
+                        return;
+                    }
+                }
+            }
+            this.sprite.isLocked = true;
+        }
+    },
+
+
+
     processMouseMove:function(event){ // движение по горизонтали
         var location = event.getLocation();
         if(this.isDragging){
@@ -114,14 +151,6 @@ var HelloWorldLayer = cc.Layer.extend({
             this.sprite.y = location.y;
         }
     },
-
-    processMouseUp:function(event){ // движение вверх
-        this.isDragging = false;
-        if(this.isInTarget()){
-            this.sprite.isLocked = true;
-        }
-    },
-
     isInTarget:function(){ // в клетке или нет
         for (var i = 0; i < this.grid.length; i++) {
             if (cc.rectContainsPoint(this.grid[i].getBoundingBox(), cc.p(this.sprite.x, this.sprite.y))) {
