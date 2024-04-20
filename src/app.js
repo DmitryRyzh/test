@@ -33,7 +33,7 @@ var HelloWorldLayer = cc.Layer.extend({
         // команда красных
         var redCircle  = new cc.Sprite("res/circle.png"); // красный круг
         redCircle .attr({
-            x: cc.winSize.width / 2 - 100,
+            x: cc.winSize.width / 2 - 110,
             y: cc.winSize.height / 2 + 270,
             value: 1,
             team: 'red'
@@ -44,7 +44,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var redCircle  = new cc.Sprite("res/circle.png"); // красный круг
         redCircle .attr({
-            x: cc.winSize.width / 2 - 100,
+            x: cc.winSize.width / 2 - 160,
             y: cc.winSize.height / 2 + 270,
             value: 1,
             team: 'red'
@@ -55,7 +55,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var redCross  = new cc.Sprite("res/cross.png"); // красный крест
         redCross .attr({
-            x: cc.winSize.width / 2 - 0,
+            x: cc.winSize.width / 2 - 60,
             y: cc.winSize.height / 2 + 270,
             value: 2,
             team: 'red'
@@ -86,7 +86,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var redTriangle  = new cc.Sprite("res/triangle.png"); // красный треугольник
         redTriangle .attr({
-            x: cc.winSize.width / 2 + 100,
+            x: cc.winSize.width / 2 + 180,
             y: cc.winSize.height / 2 + 270,
             value: 3,
             team: 'red'
@@ -97,7 +97,7 @@ var HelloWorldLayer = cc.Layer.extend({
         // команда синих
         var blueCircle  = new cc.Sprite("res/blue_circle.png");// синий круг
         blueCircle .attr({
-            x: cc.winSize.width / 2 - 100,
+            x: cc.winSize.width / 2 - 150,
             y: cc.winSize.height / 2 - 270,
             value: 1,
             team: 'blue'
@@ -120,7 +120,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var blueCross  = new cc.Sprite("res/blue_cross.png"); // синий крест
         blueCross .attr({
-            x: cc.winSize.width / 2 + 0,
+            x: cc.winSize.width / 2 + 70,
             y: cc.winSize.height / 2 - 270,
             value: 2,
             team: 'blue'
@@ -129,7 +129,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this.sprites.push(blueCross );
         var blueCross  = new cc.Sprite("res/blue_cross.png"); // синий крест
         blueCross .attr({
-            x: cc.winSize.width / 2 + 0,
+            x: cc.winSize.width / 2 - 10,
             y: cc.winSize.height / 2 - 270,
             value: 2,
             team: 'blue'
@@ -139,7 +139,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var blueTriangle  = new cc.Sprite("res/blue_triangle.png"); // синий треугольник
         blueTriangle .attr({
-            x: cc.winSize.width / 2 + 100,
+            x: cc.winSize.width / 2 + 140,
             y: cc.winSize.height / 2 - 270,
             value: 3,
             team: 'blue'
@@ -149,7 +149,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var blueTriangle  = new cc.Sprite("res/blue_triangle.png"); // синий треугольник
         blueTriangle .attr({
-            x: cc.winSize.width / 2 + 100,
+            x: cc.winSize.width / 2 + 240,
             y: cc.winSize.height / 2 - 270,
             value: 3,
             team: 'blue'
